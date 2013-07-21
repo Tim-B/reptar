@@ -2,21 +2,21 @@
 
     class SettingsFactory {
 
-        private static $groupName = 'reptar';
+        const GROUP_NAME = 'reptar';
         private $gid;
         private $title = 'Reptar';
         private $description = 'Advanced Reputation System';
         private $default = 'no';
         private $order = 1;
         private $settings = array();
-        public static $booleanType = 'yesno';
-        public static $textType = 'text';
+        const TYPE_BOOLEAN = 'yesno';
+        const TYPE_TEXT = 'text';
 
         public function __construct() {
             global $db;
             $group = array(
                 'gid' => 'NULL',
-                'name' => self::$groupName,
+                'name' => self::GROUP_NAME,
                 'title' => $this->title,
                 'description' => $this->description,
                 'disporder' => $this->order,
@@ -39,7 +39,7 @@
             $query .= 'name, title, description, optionscode, value, disporder, gid, isdefault ) ';
             $query .= 'VALUES ';
             foreach ($this->settings as $setting) {
-                $query .= $setting->getQuery(self::$groupName, $this->gid, $count++) . ', ';
+                $query .= $setting->getQuery(self::GROUP_NAME, $this->gid, $count++) . ', ';
             }
             $query = substr($query, 0, -2);
             $query .= ';';
@@ -48,20 +48,43 @@
 
         public static function removeSettings() {
             global $db;
-            $result = $db->simple_select('settinggroups', 'gid', 'name=\'' . self::$groupName . '\'');
+            $result = $db->simple_select('settinggroups', 'gid', 'name=\'' . self::GROUP_NAME . '\'');
             $gid = $db->fetch_field($result, 'gid');
-            $db->delete_query('settings', 'gid=' . $gid);
-            $db->delete_query('settinggroups', 'gid=' . $gid);
+            if ($gid != null) {
+                $db->delete_query('settings', 'gid=' . $gid);
+                $db->delete_query('settinggroups', 'gid=' . $gid);
+            }
         }
 
         public static function settingsGroupExists() {
             global $db;
-            $result = $db->simple_select('settinggroups', 'gid', 'name=\'' . self::$groupName . '\'');
+            $result = $db->simple_select('settinggroups', 'gid', 'name=\'' . self::GROUP_NAME . '\'');
             $gid = $db->fetch_field($result, 'gid');
             if ($gid == null) {
                 return false;
             } else {
                 return true;
+            }
+        }
+
+        public static function setupTables() {
+            global $db;
+            $query = 'CREATE TABLE ' . TABLE_PREFIX . 'reptar_ratings (
+            `reptar_id` int(10) UNSIGNED NOT NULL auto_increment,
+            `uid` int(10) UNSIGNED NOT NULL,
+            `target_uid` int(10) UNSIGNED NOT NULL,
+            `rate_time` int(10) UNSIGNED NOT NULL,
+            `rating` smallint(5) UNSIGNED NOT NULL,
+            PRIMARY KEY  (`reptar_id`)
+            ) ENGINE=MyISAM';
+            $db->write_query($query);
+        }
+
+        public static function removeTables() {
+            global $db;
+
+            if ($db->table_exists('reptar_ratings')) {
+                $db->drop_table('reptar_ratings');
             }
         }
 

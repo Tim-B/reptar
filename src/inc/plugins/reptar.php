@@ -9,6 +9,7 @@
 
     $plugins->add_hook("postbit", "postbit_hook");
     $plugins->add_hook("showthread_end", "showthreadend_hook");
+    $plugins->add_hook("xmlhttp", "ajaxrate_hook");
 
     function reptar_info() {
         return array(
@@ -49,6 +50,10 @@
 
     function showthreadend_hook() {
         return ReptarCore::instance()->showthreadEnd();
+    }
+
+    function ajaxrate_hook() {
+        return ReptarCore::instance()->rate();
     }
 
 
