@@ -2,6 +2,13 @@
 
     require_once('./tests/inc/Reptar_UnitTest.php');
 
+    /**
+     * Fake the post check.
+     *
+     * @param $code
+     * @param bool $silent
+     * @return bool
+     */
     function verify_post_check($code, $silent = false) {
         return $code == 'abc123';
     }
