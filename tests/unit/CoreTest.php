@@ -1,6 +1,6 @@
 <?php
 
-    require_once('./inc/Reptar_UnitTest.php');
+    require_once('./tests/inc/Reptar_UnitTest.php');
 
     function verify_post_check($code, $silent = false) {
         return $code == 'abc123';
@@ -15,7 +15,7 @@
             if (!defined('MYBB_ROOT')) {
                 define('MYBB_ROOT', dirname(dirname(__FILE__)) . "/../src/");
             }
-            require_once('../src/inc/reptar/ReptarCore.php');
+            require_once('./src/inc/reptar/ReptarCore.php');
         }
 
         public function testSingleton() {
