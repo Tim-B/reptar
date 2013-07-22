@@ -2,3 +2,8 @@ language: php
 
 php:
   - 5.3
+
+before_script:
+  - wget https://github.com/mybb/mybb/archive/mybb_1610.zip
+  - unzip mybb_1610.zip
+  - ls
