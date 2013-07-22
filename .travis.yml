@@ -7,4 +7,4 @@ before_script:
   - wget https://github.com/mybb/mybb/archive/mybb_1610.zip
   - unzip mybb_1610.zip
   - cp -r mybb-mybb_1610 src
-  - ls /src
+  - ls ./src
